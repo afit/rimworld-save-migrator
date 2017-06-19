@@ -38,8 +38,10 @@ instructions for that on [reddit](https://www.reddit.com/r/RimWorld/comments/5jp
 
 On macOS, they're probably at:
 
-`/Users/[username]/Library/Application\ Support/Ludeon\ Studios/RimWorld/Saves`
+`/Users/[username]/Library/Application\ Support/RimWorld/Saves`
 
 On Windows, they're probably at:
 
 `C:\Users\[username]\AppData\LocalLow\Ludeon\RimWorld\Saves`
+
+Check [the wiki](http://rimworldwiki.com/wiki/Save_file) for more detail.
