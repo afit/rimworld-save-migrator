@@ -16,6 +16,9 @@ The scripts work on Windows, macOS and Linux and require Python 2.7 and `lxml`.
 To install `lxml`, you'll want to run  `easy_install lxml`.
 If you already know Python, you'll probably use `pip` and `virtualenv` for this.
 
+If you have mods installed, you'll want to remove them first, and remove the
+references to them from your save.
+
 ## A16 to A17 (June 2017)
 
 In the `a16_to_a17` folder there's a script which will wholesale convert an A16
