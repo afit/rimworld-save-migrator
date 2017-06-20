@@ -9,20 +9,7 @@ For more on RimWorld, see the [official site](https://rimworldgame.com) or [/r/R
 | [A16 to A17](https://github.com/afit/rimworld-save-migrator/blob/master/a16_to_a17/upgrade_rws_a16_to_a17.py) | ✅ Fully automated | June 2017 | [reddit](https://www.reddit.com/r/RimWorld/comments/6gk9m9/that_time_again_a16_save_a17/) |
 | [A15 to A16](https://github.com/afit/rimworld-save-migrator/blob/master/a15_to_a16/replaceoccs.py)  | Partly automated   | December 2016 | [Pastebin](http://pastebin.com/HNFFsMBC) |
 
-In order to run these migrations, you'll first need to create a new saved game using the version you want to migrate to.
-
-### A16 to A17
-
-In the `a16_to_a17` folder there's a script which will wholesale convert an A16
-game to A17. In order to do this you'll need to create a new game in A17 with
-the same seed as your A16 world, as the script will need some data for that.
-
-### A15 to A16
-
-In the `a15_to_a16` folder there is a much simpler script which patches
-occupations as part of the migration to A16. Unfortunately, the rest of the
-upgrade logic is not in the script and must be done manually. You can find the
-instructions for that on [reddit](https://www.reddit.com/r/RimWorld/comments/5jp9at/best_sit_down_updating_an_a15_save_to_a16/).
+In order to run these migrations, you'll first need to create a new saved game using the version you want to migrate to, with the same seed as the save you want to upgrade.
 
 ## Requirements
 
@@ -37,7 +24,36 @@ If you already know Python, you'll probably use `virtualenv` for this.
 If you have mods installed, you'll want to remove them first, and remove the
 references to them from your save.
 
-## Usage
+## Analysing saves
+
+These scripts include `analyse_saves.py`, a handy utility for extracting seeds and playtime from maps. If you run it, it looks like this:
+
+```bash
+$ python analyse_saves.py
+Your saves should be at /Users/Guest/Library/Application Support/RimWorld/Saves...
+a14_bogdan
+ Version:       0.14.1249 rev944
+ Seed:          bogdan (200, 150)
+ Real playtime: 0:00:24
+ Mods:          Core
+a15_bogdan
+ Version:       0.15.1284 rev141
+ Seed:          bogdan (200, 150)
+ Real playtime: 0:00:23
+ Mods:          Core
+a16_bogdan
+ Version:       0.16.1393 rev538
+ Seed:          bogdan (250, 1, 250)
+ Real playtime: 0:00:26
+ Mods:          Core
+a17_bogdan
+ Version:       0.17.1557 rev1154
+ Seed:          bodgan (250, 1, 250)
+ Real playtime: 0:00:12
+ Mods:          Core
+```
+
+## Migrating saves
 
 The A16 to A17 script is simple to run. If you run it without any arguments, it'll tell you how:
 
@@ -67,6 +83,9 @@ The logic for these scripts came from FMKirby's posts on reddit.
 
 ## Where are my saves?
 
+The `analyse_saves.py` script will tell you this when you run it, but you could
+check [the wiki](http://rimworldwiki.com/wiki/Save_file) for more detail.
+
 On macOS, they're probably at:
 
 `~/Library/Application Support/RimWorld/Saves`
@@ -78,5 +97,3 @@ On Windows, they're probably at:
 On Linux, they're probably at:
 
 `~/.config/unity3d/Ludeon Studios/RimWorld by Ludeon Studios/Saves`
-
-Check [the wiki](http://rimworldwiki.com/wiki/Save_file) for more detail.
