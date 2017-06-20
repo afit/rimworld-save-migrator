@@ -39,7 +39,12 @@ for save in os.listdir( save_path ):
     if save.endswith('.rws'):
         print '%s' % save[:-4]
 
-        tree = etree.parse( join( save_path, save ) )
+        try:
+            tree = etree.parse( join( save_path, save ) )
+        except etree.XMLSyntaxError, e:
+            print '\tThis save is misformed; skipping it...'
+            print '\tError:         %s' % e.message
+            continue
 
         # Pull out the key bits
         version = tree.xpath('/savegame/meta/gameVersion' )[0].text
