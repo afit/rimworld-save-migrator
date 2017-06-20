@@ -26,7 +26,7 @@ try:
     from lxml import etree
     from lxml import objectify
 except:
-    print 'Couldn\'t load lxml. Make sure you have this library installed.\nTry running this:\n\teasy_install lxml'
+    print 'Couldn\'t load lxml. Make sure you have this library installed.\nTry running this:\n\tpip install lxml'
     exit(-1)
 
 for save in os.listdir( save_path ):

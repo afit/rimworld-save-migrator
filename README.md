@@ -31,7 +31,7 @@ Python is pre-installed on macOS and Linux. On Windows, it is available as a [fr
 Make sure you get the 2.7 version, not the 3.x.
 
 There's a single dependancy that the scripts require: `lxml`.
-To install `lxml`, you'll want to run  `pip lxml` in your Command Prompt or Terminal.
+To install `lxml`, you'll want to run  `pip install lxml` in your Command Prompt or Terminal.
 If you already know Python, you'll probably use `virtualenv` for this.
 
 If you have mods installed, you'll want to remove them first, and remove the
