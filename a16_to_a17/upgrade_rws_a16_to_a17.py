@@ -185,6 +185,8 @@ things = tree.xpath( '''
 //li[@Class="Building_Sarcophagus"]/innerContainer | //thing[@Class="Building_Sarcophagus"]/innerContainer |
 //li[@Class="Building_Grave"]/innerContainer | //thing[@Class="Building_Grave"]/innerContainer |
 //li[@Class="MinifiedThing"]/innerContainer | //thing[@Class="MinifiedThing"]/innerContainer |
+//li[@Class="Building_AncientCryptosleepCasket"]/innerContainer | //thing[@Class="Building_AncientCryptosleepCasket"]/innerContainer |
+//li[@Class="ActiveDropPod"]/innerContainer | //thing[@Class="ActiveDropPod"]/contents/innerContainer |
 //li[@Class="CryptosleepCasket"]/innerContainer | //thing[@Class="CryptosleepCasket"]/innerContainer |
 //li[@Class="TransportPod"]/innerContainer | //thing[@Class="TransportPod"]/innerContainer''')
 
