@@ -5,7 +5,7 @@ saves between different versions.
 For more on RimWorld, see the [official site](https://rimworldgame.com) or [/r/RimWorld](https://www.reddit.com/r/RimWorld/).
 
 | Migration   | Supported          | Era | More info |
-| ----------- | ------------------ | --------- | -----| --------- |
+| ----------- | ------------------ | ----| --------- |
 | [A16 to A17](https://github.com/afit/rimworld-save-migrator/blob/master/a16_to_a17/upgrade_rws_a16_to_a17.py) | ✅ Fully automated | June 2017 | [reddit](https://www.reddit.com/r/RimWorld/comments/6gk9m9/that_time_again_a16_save_a17/) |
 | [A15 to A16](https://github.com/afit/rimworld-save-migrator/blob/master/a15_to_a16/replaceoccs.py)  | Partly automated   | December 2016 | [Pastebin](http://pastebin.com/HNFFsMBC) |
 
