@@ -45,10 +45,6 @@ def insert_after_only(xpath_results_list, new_element):
     parent = xpath_results_list[0].getparent()
     parent.insert( parent.index(xpath_results_list[0]) + 1, new_element )
 
-def replace_many(xpath_results_list, new_element):
-    for element in xpath_results_list:
-        replace_singular( [element,], new_element )
-
 def replace_singular(xpath_results_list, new_element):
     if len(xpath_results_list) > 1:
         raise Exception('There\'s more than one %s' % xpath_results_list[0].getroottree().getpath(element[0]) )
@@ -122,9 +118,6 @@ for line in fin:
     # 3c
     line = line.replace( 'MalariBlock', 'Penoxycyline' )
 
-
-    line = line.replace( '<inventory>', '<inventory>\n<itemsNotForSale />' )
-
     # 8d, 8e
     line = line.replace( '<map>', '<map><li><uniqueID>0</uniqueID>' )
     line = line.replace( '</map>', '</li></map>' )
@@ -165,13 +158,19 @@ for line in fin:
     # 23c
     line = line.replace( 'desiredSize', 'rootSize' )
 
-    # 27
+    # 27a, 27b
     line = line.replace( '<innerThing', '<innerContainer>\n<maxStacks>1</maxStacks>\n<innerList>\n<li' )
     line = line.replace( '</innerThing>', '</li>\n</innerList>\n</innerContainer>' )
 
-    # 28
+    # 28a, 28b
     line = line.replace( '<containedThings>', '<innerContainer>\n<innerList>' )
     line = line.replace( '</containedThings>', '</innerList>\n</innerContainer>' )
+
+    # 29
+    # Uhuh.
+
+    # 32
+    line = line.replace( '<inventory>', '<inventory>\n<itemsNotForSale />' )
 
     fout.write( line )
 
@@ -310,27 +309,24 @@ for corpse in tree.xpath('//thing[@Class="Corpse"]/innerPawn'):
 </innerContainer>''' % name ) )
     corpse.getparent().remove( corpse )
 
-# 26
-area_index = 1
+# 26a, 26b
+area_index = 0
+areas_seen = {}
 
-for area in tree.xpath('//areaManager/areas/li[starts-with(@Class, "Area_")]/label'):
-    # Give all areas a number
-    area.getparent().insert( 0, etree.XML( '<id>%s</id>' % area_index ) )
-    area_index += 1
+# We diverge slightly from the instructions here to make it work properly.
+for area in tree.xpath('//areaManager/areas/li[starts-with(@Class, "Area_")]'):
+    # Give all uniquely classed (not named!) areas a number
+    if area.attrib['Class'] not in areas_seen.keys():
+        areas_seen[ area.attrib['Class'] ] = area_index
+        area.insert( 0, etree.XML( '<ID>%s</ID>' % area_index ) )
+        area_index += 1
 
-    #labels = area.xpath('/label')
-
-    #print len(labels)
-
-    #if len(labels) > 0:
-    label = area.text
-    print 'class is', label
-
-    # Find all references to those areas, and change the name to reflect the number
-    for area_reference in tree.xpath('//areaAllowed[text()="Area_Named_%s"]' % label ):
-        # ie. So 'Area_People_outside' becomes 'Area_1_People_outside'
-        area_reference.text = area_reference.text.replace( 'Area_', 'Area_%s_' % area_index )
-        # FIXME do I need to remove the Class attribute, too?
+# Find all references to those areas, and change the name to reflect the number
+# That's what the instructions say. But real world it always seems to be -1,
+# so we'll do that instead.
+for area_reference in tree.xpath('//areaAllowed[starts-with(text(), "Area_Named_")]' ):
+    # ie. So 'Area_People_outside' becomes 'Area_-1_People_outside'
+    area_reference.text = area_reference.text.replace( 'Area_', 'Area_%s_' % -1 ) #area_index )
 
 # 26c
 map_size_tuple = new_template.xpath( '//mapInfo/size' )[0] # Looks like '(250, 1, 250)'
@@ -341,15 +337,19 @@ for innerGrid in tree.xpath('//innerGrid'):
     innerGrid.append( etree.XML( '<mapSizeZ>%s</mapSizeZ>' % map_size_tuple[2] ) )
 
 # 30
-for drafter in tree.xpath('//drafter/drafter'):
+for drafter in tree.xpath('//savegame/game/maps/li/things/thing/drafter/drafter'):
     # Remove the inner drafter element
+    old_parent = drafter.getparent()
     drafter.getparent().getparent().append( drafter )
-    drafter.getparent().getparent().remove( drafter.getparent() )
+    old_parent.getparent().remove( old_parent )
 
 # 31
-for age in tree.xpath('//def[text()=AteInImpressiveDiningRoom]/age'):
-    age.getparent().insert( 1, etree.XML( '<otherPawn>null</otherPawn>' ) )
-    age.getparent().remove( age )
+for def_ate in tree.xpath('//li/def[text()="AteInImpressiveDiningRoom"]'):
+    for sibling in def_ate.itersiblings():
+        if sibling.tag == 'age':
+            def_ate.getparent().insert( 1, etree.XML( '<otherPawn>null</otherPawn>' ) )
+            def_ate.getparent().remove( sibling )
+            break
 
 # 34
 insert_after_only(
