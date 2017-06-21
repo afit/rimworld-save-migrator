@@ -6,8 +6,8 @@ For more on RimWorld, see the [official site](https://rimworldgame.com) or [/r/R
 
 | Migration   | Supported          | Era | More info |
 | ----------- | ------------------ | ----| --------- |
-| [A16 to A17](https://github.com/afit/rimworld-save-migrator/blob/master/a16_to_a17/upgrade_rws_a16_to_a17.py) | ✅ Fully automated | June 2017 | [reddit](https://www.reddit.com/r/RimWorld/comments/6gk9m9/that_time_again_a16_save_a17/) |
-| [A15 to A16](https://github.com/afit/rimworld-save-migrator/blob/master/a15_to_a16/replaceoccs.py)  | Partly automated   | December 2016 | [Pastebin](http://pastebin.com/HNFFsMBC) |
+| [A16 to A17](https://github.com/afit/rimworld-save-migrator/blob/master/upgrade_rws_a16_to_a17.py) | ✅ Fully automated | June 2017 | [reddit](https://www.reddit.com/r/RimWorld/comments/6gk9m9/that_time_again_a16_save_a17/) |
+| [A15 to A16](https://github.com/afit/rimworld-save-migrator/blob/master/upgrade_rws_a15_to_a16.py)  | ✅ Fully automated | December 2016 | [Pastebin](http://pastebin.com/HNFFsMBC) |
 
 In order to run these migrations, you'll first need to create a new saved game using the version you want to migrate to, with the same seed as the save you want to upgrade.
 
@@ -83,8 +83,7 @@ The logic for these scripts came from FMKirby's posts on reddit.
 
 ## Where are my saves?
 
-The `analyse_saves.py` script will tell you this when you run it, but you could
-check [the wiki](http://rimworldwiki.com/wiki/Save_file) for more detail.
+The `analyse_saves.py` script tells you this when you run it, but [the wiki](http://rimworldwiki.com/wiki/Save_file) has more detail.
 
 On macOS, they're probably at:
 
