@@ -5,7 +5,6 @@ from os.path import join, dirname, normpath, exists, split
 
 try:
     from lxml import etree
-    from lxml import objectify
 except:
     print 'Couldn\'t load lxml. Make sure you have this library installed.\nTry running this:\n\tpip install lxml'
     exit(-1)
@@ -37,10 +36,6 @@ if not exists(save):
 if not exists(a17):
     print 'The specified A17 file doesn\'t appear to exist.'
     exit(-1)
-
-# Finding something?
-#   x = tree.xpath('//tutor')
-#   print x[0].getroottree().getpath(x[0])
 
 def insert_after(element, new_element):
     parent = element.getparent()
@@ -186,7 +181,8 @@ things = tree.xpath( '''
 //li[@Class="Building_Grave"]/innerContainer | //thing[@Class="Building_Grave"]/innerContainer |
 //li[@Class="MinifiedThing"]/innerContainer | //thing[@Class="MinifiedThing"]/innerContainer |
 //li[@Class="Building_AncientCryptosleepCasket"]/innerContainer | //thing[@Class="Building_AncientCryptosleepCasket"]/innerContainer |
-//li[@Class="ActiveDropPod"]/innerContainer | //thing[@Class="ActiveDropPod"]/contents/innerContainer |
+//thing[@Class="ActiveDropPod"]/contents/innerContainer |
+//thing[@Class="DropPodIncoming"]/contents/innerContainer |
 //li[@Class="CryptosleepCasket"]/innerContainer | //thing[@Class="CryptosleepCasket"]/innerContainer |
 //li[@Class="TransportPod"]/innerContainer | //thing[@Class="TransportPod"]/innerContainer''')
 
