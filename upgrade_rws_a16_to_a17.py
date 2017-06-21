@@ -201,4 +201,7 @@ for trader in traders:
     trader.addprevious( etree.XML( '<expiration>-1</expiration>' ) )
     trader.addprevious( etree.XML( '<previouslyGeneratedInhabitants />' ) )
 
+# Finally, let's update the version string!
+tree.xpath('/savegame/meta/gameVersion')[0].text = '0.17.1557 rev1154'
+
 tree.write( new_save, pretty_print=True, xml_declaration=True, encoding='utf-8' )
