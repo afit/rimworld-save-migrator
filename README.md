@@ -17,7 +17,7 @@ In order to run these migrations, you'll first need to create a new saved game u
 If you are upgrading multiple versions, load and save the migrated game at each stage.
 
 * A16 to A17:
-  * Implants will be reset. There is a [manual workaround](https://www.reddit.com/r/RimWorld/comments/6gk9m9/that_time_again_a16_save_a17/).
+  * All missing parts and injuries will be restored, although implants and parts will be maintained.
   * Some character backstories have been removed; they will be assigned random ones.
   * Some material stacks will be trimmed to 75.
 * A15 to A16:

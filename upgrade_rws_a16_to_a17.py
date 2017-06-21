@@ -208,4 +208,35 @@ tree.xpath('/savegame/meta/gameVersion')[0].text = '0.17.1557 rev1154'
 for guest in tree.xpath('//guest'):
     insert_after( guest, etree.XML( '<guilt IsNull="True"/>' ) )
 
+# Let's fix body parts. For now, we'll restore the missing ones, and bind the
+# add-ons and implants.
+for hediffset in tree.xpath('//hediffSet/hediffs'):
+    for li in hediffset.iterchildren():
+        if li.attrib.has_key('Class'):
+            #print li.attrib['Class'], li.xpath('partIndex')[0].text, li.xpath('def')[0].text
+            if li.attrib['Class'] in ['Hediff_AddedPart', 'Hediff_Implant']:
+                part = li.xpath('partIndex')[0]
+
+                part_mapping = {
+                    '28': '26', # Brain
+                    '29': '27', # Eye
+                    '30': '28', # Eye
+                    '35': '35', # Arm
+                    # Other A17 defs
+                    # 36 is left humerus
+                    # 38 is left hand
+                    # 39 is left pinky
+                    # 40 is left ring finger
+                    '39': '37', # Left radius
+                    '45': '46', # Arm
+                    '55': '56', # Leg
+                    '64': '65', # Leg
+                }
+
+                if part.text in part_mapping.keys():
+                    part.text = part_mapping[part.text]
+            # Restore all missing parts
+            elif li.attrib['Class'] in ['Hediff_MissingPart', 'HediffWithComps', 'Hediff_Injury']:
+                li.getparent().remove( li )
+
 tree.write( new_save, pretty_print=True, xml_declaration=True, encoding='utf-8' )
