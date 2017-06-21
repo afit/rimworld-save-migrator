@@ -324,9 +324,12 @@ for area in tree.xpath('//areaManager/areas/li[starts-with(@Class, "Area_")]'):
 # Find all references to those areas, and change the name to reflect the number
 # That's what the instructions say. But real world it always seems to be -1,
 # so we'll do that instead.
-for area_reference in tree.xpath('//areaAllowed[starts-with(text(), "Area_Named_")]' ):
-    # ie. So 'Area_People_outside' becomes 'Area_-1_People_outside'
-    area_reference.text = area_reference.text.replace( 'Area_', 'Area_%s_' % -1 ) #area_index )
+for area_reference in tree.xpath('//areaAllowed[starts-with(text(), "Area_")]' ):
+    # ie. So 'Area_Named_People_outside' becomes 'Area_-1_Named_People_outside'
+    if area_reference.text.startswith('Area_Named_'):
+        area_reference.text = area_reference.text.replace( 'Area_', 'Area_-1_' )
+    else:
+        area_reference.text = area_reference.text.replace( 'Area_', 'Area_%s_' % areas_seen[ area_reference.text ] )
 
 # 26c
 map_size_tuple = new_template.xpath( '//mapInfo/size' )[0] # Looks like '(250, 1, 250)'
@@ -363,6 +366,11 @@ insert_after_only(
     etree.XML ( '''<damageWatcher>
 <everDamage>378</everDamage>
 </damageWatcher>''' ) )
+
+# Not in the FNKirby's docs, but it's important.
+for nullJobQueue in tree.xpath('//jobs/jobQueue[@IsNull="True"]'):
+    del nullJobQueue.attrib['IsNull']
+    nullJobQueue.insert( 0, etree.XML( '<jobs/>' ) )
 
 # Finally, let's update the version string!
 tree.xpath('/savegame/meta/gameVersion')[0].text = '0.16.1393 rev538'
