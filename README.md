@@ -21,7 +21,6 @@ If you are upgrading multiple versions, load and save the migrated game at each 
   * Some character backstories have been removed; they will be assigned random ones.
   * Some material stacks will be trimmed to 75.
 * A15 to A16:
-  * A single yellow `Area_Home` warning will be reported in the log; saving the game resolves this.
   * Body types will all be set to male: [more details](http://pastebin.com/HNFFsMBC).
   * You will be asked to name your settlement again.
 
