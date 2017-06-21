@@ -58,10 +58,10 @@ for line in fin:
 
     line = line.replace( '<primary>', '<equipment>\n<innerList>\n<li>' )
     line = line.replace( '</primary>', '</li>\n</innerList>\n</equipment>' )
-    line = line.replace( '<primary IsNull="True" />', '<equipment>\n<innerList />\n</equipment>' )
+    line = line.replace( '<primary IsNull="True"/>', '<equipment>\n<innerList />\n</equipment>' )
     line = line.replace( '<wornApparel>', '<wornApparel>\n<innerList>' )
     line = line.replace( '</wornApparel>', '</innerList>\n</wornApparel>' )
-    line = line.replace( '<wornApparel />', '<wornApparel>\n<innerList />\n</wornApparel>' )
+    line = line.replace( '<wornApparel/>', '<wornApparel>\n<innerList />\n</wornApparel>' )
     line = line.replace( '<layingDown>True</layingDown>', '<layingDown>LayingSurface</layingDown>' )
     line = line.replace( '<layingDown>False</layingDown>', '<layingDown>NotLaying</layingDown>' )
     line = line.replace( '<resourceContainer>', '<resourceContainer Class="Verse.ThingOwner`1[Verse.Thing]">' )
@@ -203,5 +203,9 @@ for trader in traders:
 
 # Finally, let's update the version string!
 tree.xpath('/savegame/meta/gameVersion')[0].text = '0.17.1557 rev1154'
+
+# Not in FMKirby's docs, but it's important.
+for guest in tree.xpath('//guest'):
+    insert_after( guest, etree.XML( '<guilt IsNull="True"/>' ) )
 
 tree.write( new_save, pretty_print=True, xml_declaration=True, encoding='utf-8' )
