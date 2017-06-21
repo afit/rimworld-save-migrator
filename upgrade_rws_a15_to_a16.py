@@ -367,7 +367,7 @@ insert_after_only(
 <everDamage>378</everDamage>
 </damageWatcher>''' ) )
 
-# Not in the FNKirby's docs, but it's important.
+# Not in FMKirby's docs, but it's important.
 for nullJobQueue in tree.xpath('//jobs/jobQueue[@IsNull="True"]'):
     del nullJobQueue.attrib['IsNull']
     nullJobQueue.insert( 0, etree.XML( '<jobs/>' ) )
