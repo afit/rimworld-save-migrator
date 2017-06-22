@@ -56,15 +56,22 @@ for line in fin:
     line = line.replace( 'PersonalShield', 'ShieldBelt' )
     line = line.replace( 'mapConditionManager', 'gameConditionManager' )
 
+    line = line.replace( 'MapCondition_Eclipse', 'GameCondition_Eclipse' )
+
     line = line.replace( '<primary>', '<equipment>\n<innerList>\n<li>' )
     line = line.replace( '</primary>', '</li>\n</innerList>\n</equipment>' )
     line = line.replace( '<primary IsNull="True"/>', '<equipment>\n<innerList />\n</equipment>' )
+    line = line.replace( '<primary IsNull="True" />', '<equipment>\n<innerList />\n</equipment>' )
+
     line = line.replace( '<wornApparel>', '<wornApparel>\n<innerList>' )
     line = line.replace( '</wornApparel>', '</innerList>\n</wornApparel>' )
     line = line.replace( '<wornApparel/>', '<wornApparel>\n<innerList />\n</wornApparel>' )
+    line = line.replace( '<wornApparel />', '<wornApparel>\n<innerList />\n</wornApparel>' )
+
     line = line.replace( '<layingDown>True</layingDown>', '<layingDown>LayingSurface</layingDown>' )
     line = line.replace( '<layingDown>False</layingDown>', '<layingDown>NotLaying</layingDown>' )
     line = line.replace( '<resourceContainer>', '<resourceContainer Class="Verse.ThingOwner`1[Verse.Thing]">' )
+
     line = line.replace( 'AssignedDrugsSet' , 'DrugPolicy' )
 
     fout.write( line )
@@ -212,31 +219,40 @@ for guest in tree.xpath('//guest'):
 # add-ons and implants.
 for hediffset in tree.xpath('//hediffSet/hediffs'):
     for li in hediffset.iterchildren():
-        if li.attrib.has_key('Class'):
-            #print li.attrib['Class'], li.xpath('partIndex')[0].text, li.xpath('def')[0].text
-            if li.attrib['Class'] in ['Hediff_AddedPart', 'Hediff_Implant']:
-                part = li.xpath('partIndex')[0]
+        if li.attrib.has_key('Class') and li.attrib['Class'] in ['Hediff_MissingPart']: #,
+            # Restore missing parts: bionics now imply this, and without
+            # you'll have a bionic but be penalised for having missing parts.
+            li.getparent().remove( li )
+        else: #if li.attrib['Class'] in ['Hediff_AddedPart', 'Hediff_Implant', 'HediffWithComps', 'Hediff_Injury']:
+            parts = li.xpath('partIndex')
+            
+            if len(parts) == 1:
+                #print li.attrib['Class'], li.xpath('partIndex')[0].text, li.xpath('def')[0].text
+                part = parts[0] # li.xpath('partIndex')[0]
 
                 part_mapping = {
+                    # Other A17 defs
+                    # 0 is torso
+                    # 25 is skull
                     '28': '26', # Brain
                     '29': '27', # Eye
                     '30': '28', # Eye
+                    # 31 is nose
+                    # 32 is jaw or right thumb
                     '35': '35', # Arm
-                    # Other A17 defs
                     # 36 is left humerus
+                    '39': '37', # Left radius
                     # 38 is left hand
                     # 39 is left pinky
                     # 40 is left ring finger
-                    '39': '37', # Left radius
                     '45': '46', # Arm
+                    # 54 is jaw or right thumb
                     '55': '56', # Leg
                     '64': '65', # Leg
+                    # 67 is right tibia
                 }
 
                 if part.text in part_mapping.keys():
                     part.text = part_mapping[part.text]
-            # Restore all missing parts
-            elif li.attrib['Class'] in ['Hediff_MissingPart', 'HediffWithComps', 'Hediff_Injury']:
-                li.getparent().remove( li )
 
 tree.write( new_save, pretty_print=True, xml_declaration=True, encoding='utf-8' )
