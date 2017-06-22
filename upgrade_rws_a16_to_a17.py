@@ -215,44 +215,57 @@ tree.xpath('/savegame/meta/gameVersion')[0].text = '0.17.1557 rev1154'
 for guest in tree.xpath('//guest'):
     insert_after( guest, etree.XML( '<guilt IsNull="True"/>' ) )
 
-# Let's fix body parts. For now, we'll restore the missing ones, and bind the
-# add-ons and implants.
+# Let's fix stuff happening with bodies.
+from tables import a16, a17
+
 for hediffset in tree.xpath('//hediffSet/hediffs'):
+
+    if hediffset.getparent().getparent().getparent().xpath('name')[0].xpath('nick'):
+        # Human
+        name = hediffset.getparent().getparent().getparent().xpath('name')[0].xpath('nick')[0].text
+        kind = hediffset.getparent().getparent().getparent().xpath('def')[0].text
+    elif len( hediffset.getparent().getparent().getparent().xpath('name')[0].getchildren() ) == 0:
+        # No name yet
+        name = hediffset.getparent().getparent().getparent().xpath('id')[0].text
+        kind = hediffset.getparent().getparent().getparent().xpath('kindDef')[0].text
+    else:
+        # If it's an animal it won't have a nick
+        name = hediffset.getparent().getparent().getparent().xpath('name')[0].xpath('name')[0].text
+        kind = hediffset.getparent().getparent().getparent().xpath('kindDef')[0].text
+
+    #print 'Name: %s' % name, kind
+
     for li in hediffset.iterchildren():
-        if li.attrib.has_key('Class') and li.attrib['Class'] in ['Hediff_MissingPart']: #,
-            # Restore missing parts: bionics now imply this, and without
-            # you'll have a bionic but be penalised for having missing parts.
-            li.getparent().remove( li )
-        else: #if li.attrib['Class'] in ['Hediff_AddedPart', 'Hediff_Implant', 'HediffWithComps', 'Hediff_Injury']:
-            parts = li.xpath('partIndex')
-            
-            if len(parts) == 1:
-                #print li.attrib['Class'], li.xpath('partIndex')[0].text, li.xpath('def')[0].text
-                part = parts[0] # li.xpath('partIndex')[0]
+        if li.attrib.has_key('Class'): # and li.attrib['Class'] in ['Hediff_AddedPart', 'Hediff_Implant']:
+            if li.xpath('partIndex'):
 
-                part_mapping = {
-                    # Other A17 defs
-                    # 0 is torso
-                    # 25 is skull
-                    '28': '26', # Brain
-                    '29': '27', # Eye
-                    '30': '28', # Eye
-                    # 31 is nose
-                    # 32 is jaw or right thumb
-                    '35': '35', # Arm
-                    # 36 is left humerus
-                    '39': '37', # Left radius
-                    # 38 is left hand
-                    # 39 is left pinky
-                    # 40 is left ring finger
-                    '45': '46', # Arm
-                    # 54 is jaw or right thumb
-                    '55': '56', # Leg
-                    '64': '65', # Leg
-                    # 67 is right tibia
-                }
+                # Look up this kind's body
+                if kind in a16.type_bodies.keys():
+                    a16_body = a16.type_bodies[kind]
 
-                if part.text in part_mapping.keys():
-                    part.text = part_mapping[part.text]
+                if kind in a17.type_bodies.keys():
+                    a17_body = a17.type_bodies[kind]
+
+                a16_parts = a16.body_parts[a16_body]
+                a17_parts = a17.body_parts[a17_body]
+
+                parts = li.xpath('partIndex')
+
+                if len(parts) == 1:
+                    old_part_index = int( parts[0].text )
+                    part = a16_parts[ old_part_index ]
+
+                    try:
+                        new_part_index = str( a17_parts.index( part ) )
+                    except ValueError:
+                        if part == 'Jaw':
+                            part = 'AnimalJaw'
+                            new_part_index = str( a17_parts.index( part ) )
+                        else:
+                            raise
+
+                    #print '\t%s\'s part is: %s, changing from %s to %s' % ( name, part, old_part_index, new_part_index )
+
+                    parts[0].text = new_part_index
 
 tree.write( new_save, pretty_print=True, xml_declaration=True, encoding='utf-8' )

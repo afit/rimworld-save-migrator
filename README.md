@@ -17,8 +17,6 @@ In order to run these migrations, you'll first need to create a new saved game u
 If you are upgrading multiple versions, load and save the migrated game at each stage.
 
 * A16 to A17:
-  * All missing parts and will be restored, although implants and parts will be maintained.
-  * Some injuries may be applied to the wrong body parts.
   * Some character backstories have been removed; they will be assigned random ones.
   * Some material stacks will be trimmed to 75.
 * A15 to A16:
