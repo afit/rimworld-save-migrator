@@ -6,6 +6,7 @@ For more on RimWorld, see the [official site](https://rimworldgame.com) or [/r/R
 
 | Migration   | Supported          | Era |
 | ----------- | ------------------ | --- |
+| A17 to B18  | Built-in to Rimworld B18 | October 2017 |
 | [A16 to A17](https://github.com/afit/rimworld-save-migrator/blob/master/upgrade_rws_a16_to_a17.py) | ✅ Fully automated | June 2017 |
 | [A15 to A16](https://github.com/afit/rimworld-save-migrator/blob/master/upgrade_rws_a15_to_a16.py)  | ✅ Fully automated | December 2016 |
 | A14 to A15  | [Manual guide](https://www.reddit.com/r/RimWorld/comments/4zrotj/guide_how_to_update_an_a14_save_to_a15/) | August 2016 |
