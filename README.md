@@ -45,13 +45,11 @@ Run this script again with a path or save name to migrate it.
 If you run it with the name of a save to migrate, or a path to a save, it will try to migrate it:
 
 ```bash
-$ python migrate.py a16_bogdan
-Examining save; it is version 0.16.1393 rev538.
-Mods are installed on this save, which may break the process. If migration does not complete, try re-saving your original game without mods.
-In order to migrate this save, data is needed from a new A17 save; I'll use your most recently modified save of this version.
-Using "a17_bogdan" as seed...
-Migrating to new save "a16_bogdan.A17migration.rws"...
-Migrated successfully to "a16_bogdan.A17migration.rws", you should load and save this before migrating further. Good luck!
+$ python migrate.py b18_bogdan
+Examining save; it is version 0.18.1722 rev1206.
+This save includes mods, which complicate migration. If migration does not complete, try re-saving your original game without mods.
+Migrating to new save "b18_bogdan.1.0migration.rws"...
+Migrated successfully to "b18_bogdan.1.0migration.rws", you should load and save this before migrating further. Good luck!
 Report issues etc. to https://github.com/afit/rimworld-save-migrator.
 ```
 
@@ -64,7 +62,6 @@ Report issues etc. to https://github.com/afit/rimworld-save-migrator.
 * ~~Pawn limbs rearranged, crippling any with prosthetics.~~ *Fixed*
 * ~~Various thoughts causing errors.~~ *Fixed*
 * ~~Fox, bear, mech, wolf changes.~~ *Fixed*
-
 
 The following seem like desired behaviour, and probably shouldn't be fixed:
 
