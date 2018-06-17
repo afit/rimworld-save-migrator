@@ -16,7 +16,7 @@ if not exists:
 try:
     from lxml import etree
 except:
-    print 'Couldn\'t load lxml. Make sure you have this library installed.\nTry running this:\n\tpip install lxml'
+    print 'Couldn\'t load lxml; you can install it by running: `pip install lxml`'
     exit(-1)
 
 for save in os.listdir( save_path ):
