@@ -1,30 +1,15 @@
 #!/usr/bin/python
 import sys, subprocess, os
 
-from sys import platform as _platform
-from os.path import join, dirname, normpath, exists, split, expanduser
-from glob import glob
+from os.path import join, dirname, normpath, split
 
-home = expanduser("~")
+from utils.filesystem import get_save_path
 
-# If there are save files in the working dir, we'll look at them.
-save_path = os.getcwd()
+save_path, exists = get_save_path()
 
-# But if not, we'll use the OS defaults.
-if len( glob('*.rws') ) == 0:
-    if _platform == "darwin": # macOS
-        save_path = '~/Library/Application Support/RimWorld/Saves'
-    elif _platform == "win32": # Windows
-        save_path = '~\AppData\LocalLow\Ludeon Studios\RimWorld by Ludeon Studios\Saves'
-    else: # Linux
-        save_path = '~/.config/unity3d/Ludeon Studios/RimWorld by Ludeon Studios/Saves'
+print 'Looking for saves in %s...'  % save_path
 
-    # Expand the homedir
-    save_path = expanduser( save_path )
-
-print 'Your saves should be at %s...'  % save_path
-
-if not exists(save_path):
+if not exists:
     print 'However, that path doesn\'t exist. Do you have any saves?'
     exit(-1)
 
@@ -37,12 +22,10 @@ except:
 for save in os.listdir( save_path ):
     # Let's find all .rws files
     if save.endswith('.rws'):
-        print '%s' % save[:-4]
-
         try:
             tree = etree.parse( join( save_path, save ) )
         except etree.XMLSyntaxError, e:
-            print '\tThis save is misformed; skipping it...'
+            print '\tSave "%s" misformed; skipping it...' % save[:-4]
             print '\tError:         %s' % e.message
             continue
 
@@ -72,7 +55,7 @@ for save in os.listdir( save_path ):
             if name.text == modIds[i].text:
                 mods.append( name.text )
             else:
-                mods.append( u'%s (%s)' % ( name.text, modIds[i].text ) )
+                mods.append( u'"%s"' % name.text ) # , modIds[i].text ) )
             i += 1
         mods = ', '.join( mods )
 
@@ -80,9 +63,6 @@ for save in os.listdir( save_path ):
         h, m = divmod(m, 60)
 
         # Print that info.
-        print '\tVersion:       %s' % version
-        print '\tSeed:          %s %s' % (seed, size)
-        print '\tReal playtime: %d:%02d:%02d' % (h, m, s)
-        print '\tMods:          %s' % mods
+        print ' * "%s" (version: %s, seed: %s %s, playtime: %d:%02d:%02d, mods: %s)' % ( save[:-4], version, seed, size, h, m, s, mods )
 
 exit(0)
