@@ -12,9 +12,6 @@ def migrate( save, seed, new_save ):
     # Could not find think node with key 1694688019
     # etc.
 
-    # This seems fair enough; nothing to do here?
-    # Spawned NeutroamineX with stackCount 393 but stackLimit is 150. Truncating.
-
     # Now for the smarter XML stuff
     tree = etree.parse( save )
 
@@ -68,6 +65,14 @@ def migrate( save, seed, new_save ):
     for x in xs:
         x.getparent().remove( x )
 
+    # Spawned NeutroamineX with stackCount 393 but stackLimit is 150. Truncating.
+    # Big stacks!
+    xs = tree.xpath( '//thing/def[text()="Neutroamine"]' )
+    for x in xs:
+        count = x.getparent().xpath('stackCount')[0]
+        if int( count.text ) > 150:
+            x.text = '150'
+
     # Current map is null after loading but there are maps available. Setting current map to [0].
     n = tree.xpath( '/savegame/game' )[0]
     n.insert( 0, etree.XML( '<currentMapIndex>0</currentMapIndex>' ) )
@@ -108,7 +113,7 @@ def migrate( save, seed, new_save ):
             name = hediffset.getparent().getparent().getparent().xpath('name')[0].xpath('name')[0].text
             kind = hediffset.getparent().getparent().getparent().xpath('kindDef')[0].text
 
-        print 'Name: %s' % name, kind
+        #print 'Name: %s' % name, kind
 
         for li in hediffset.iterchildren():
             if li.attrib.has_key('Class'): # and li.attrib['Class'] in ['Hediff_AddedPart', 'Hediff_Implant']:
@@ -139,7 +144,7 @@ def migrate( save, seed, new_save ):
                     old_parts = b18tables.body_parts[old_body]
                     new_parts = u1tables.body_parts[new_body]
 
-                    print kind, old_body, new_body
+                    #print kind, old_body, new_body
 
                     parts = li.xpath('partIndex')
 
@@ -163,14 +168,22 @@ def migrate( save, seed, new_save ):
                                 part = part.replace( 'Rear', '' )
 
                             # Digit contexts
+                            if 'HandMechanicalMiddle' in part:
+                                part = part.replace( 'HandMechanicalMiddle', 'Mechanical' )
                             if 'HandMiddle' in part:
                                 part = part.replace( 'HandMiddle', '' )
                             if 'HandRing' in part:
                                 part = part.replace( 'HandRing', '' )
+                            if 'HandMechanicalIndex' in part:
+                                part = part.replace( 'HandMechanicalIndex', 'Mechanical' )
                             if 'HandIndex' in part:
                                 part = part.replace( 'HandIndex', '' )
+                            if 'HandMechanicalPinky' in part:
+                                part = part.replace( 'HandMechanicalPinky', 'MechanicalFinger' )
                             if 'HandPinky' in part:
                                 part = part.replace( 'HandPinky', 'Finger' )
+                            if 'HandMechanicalThumb' in part:
+                                part = part.replace( 'HandMechanicalThumb', 'MechanicalFinger' )
                             if 'HandThumb' in part:
                                 part = part.replace( 'HandThumb', 'Finger' )
                             if 'FootLittle' in part:
@@ -193,7 +206,8 @@ def migrate( save, seed, new_save ):
                             try:
                                 new_part_index = str( new_parts.index( part ) )
                             except:
-                                print old_part, part, new_parts
+                                #print old_part, part, new_parts
+                                raise
 
                         #print '\t%s\'s part is: %s, changing from %s to %s' % ( name, part, old_part_index, new_part_index )
 
