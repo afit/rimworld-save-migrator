@@ -50,9 +50,12 @@ for save in os.listdir( save_path ):
         version = tree.xpath('/savegame/meta/gameVersion' )[0].text
         seed = tree.xpath('/savegame/game/world/info/seedString' )[0].text
 
+        majorVersion = int( version.split('.')[0] )
         minorVersion = int( version.split('.')[1] )
 
-        if minorVersion >= 16:
+        if majorVersion == 1:
+            size = tree.xpath('/savegame/game/world/info/initialMapSize' )[0].text
+        elif minorVersion >= 16:
             size = tree.xpath('/savegame/game/maps/li/mapInfo/size' )[0].text
         else:
             size = tree.xpath('/savegame/game/world/info/size' )[0].text
