@@ -78,7 +78,7 @@ def migrate():
     # Let's use a matrix.
     matrix = {
         '0.18': {
-            'seed_needed': [1, 0],
+            'seed_needed': None,
             'seed_readable': '1.0',
             'migration': 'migrations.u1migration',
         },
@@ -97,20 +97,21 @@ def migrate():
     mi = matrix[ '.'.join( str(x) for x in save.versions[0:2] ) ]
 
     # If one wasn't passed, let's use one of the sample saves.
-    print 'In order to migrate this save, data is needed from a new %s save; I\'ll use your most recently modified save of this version.' % mi['seed_readable']
+    if mi['seed_needed']:
+        print 'In order to migrate this save, data is needed from a new %s save; I\'ll use your most recently modified save of this version.' % mi['seed_readable']
 
-    found = False
-    for s in get_saves():
-        seed = Save( s )
-        if seed.versions[0:2] == mi['seed_needed']:
-            found = True
-            break
+        found = False
+        for s in get_saves():
+            seed = Save( s )
+            if seed.versions[0:2] == mi['seed_needed']:
+                found = True
+                break
 
-    if not found:
-        print 'Couldn\'t find a save of this version to use as a seed: please create one.'
-        exit(-1)
+        if not found:
+            print 'Couldn\'t find a save of this version to use as a seed: please create one.'
+            exit(-1)
 
-    print 'Using "%s" as seed...' % seed.name
+        print 'Using "%s" as seed...' % seed.name
 
     migration_name = '%s.%smigration.rws' % ( save.name, mi['seed_readable'] )
     migration_path = join( dirname( save.path ), migration_name )
@@ -122,7 +123,10 @@ def migrate():
         exit(-1)
 
     migration = import_module( mi['migration'] )
-    migration.migrate( save.path, seed.path, migration_path )
+    if mi['seed_needed']:
+        migration.migrate( save.path, seed.path, migration_path )
+    else:
+        migration.migrate( save.path, migration_path )
 
     print 'Migrated successfully to "%s", you should load and save this before migrating further. Good luck!' % migration_name
     print 'Report issues etc. to https://github.com/afit/rimworld-save-migrator.'

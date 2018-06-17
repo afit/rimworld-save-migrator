@@ -6,7 +6,7 @@ from util.xml import insert_after
 import b18tables, u1tables
 
 
-def migrate( save, seed, new_save ):
+def migrate( save, new_save ):
     # 1.0 unstable already handles a bunch of things, though it'll warn like hell:
     # Couldn't find exact match for backstory Politician92 , using closest match Politician1
     # Could not find think node with key 1694688019
