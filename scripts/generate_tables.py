@@ -5,6 +5,9 @@ from sys import platform as _platform
 from os.path import join, dirname, normpath, exists, split, expanduser
 from pprint import pprint
 
+# If you build a migrator for a new version of RimWorld, this script can rip out tables for you.
+# You'll almost certainly need to do that where defs and kinds change and you need to map them.
+
 try:
     from lxml import etree
 except:
