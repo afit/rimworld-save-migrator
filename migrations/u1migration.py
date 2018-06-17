@@ -54,5 +54,10 @@ def migrate( save, seed, new_save ):
         x.attrib['Class'] = 'Verb_MeleeAttackDamage'
         x.insert( 1, etree.XML( '<li>0</li>' ) )
 
+    # Could not load reference to RimWorld.TraitDef named GreenThumb
+    xs = tree.xpath('//def[text()="GreenThumb"]' )
+    for x in xs:
+        x.getparent().remove( x )
+
     # Format it nicely; takes space but it's easier to debug.
     tree.write( new_save, pretty_print=True, xml_declaration=True, encoding='utf-8' )
