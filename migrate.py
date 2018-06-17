@@ -8,10 +8,13 @@ from util.exceptions import MisformedSaveError
 from util.filesystem import get_saves, get_save_path, get_path_from_name
 from util.saves import Save
 
+
 def migrate():
     if len(sys.argv) > 1:
         save_name = sys.argv[1]
     else: save_name = None
+
+    debug = len(sys.argv) > 2 and sys.argv[2] == 'debug'
 
     if not save_name:
         print 'No argument provided; listing saves in %s...\n'  % get_save_path()
@@ -114,7 +117,7 @@ def migrate():
 
     print 'Migrating to new save "%s"...' % migration_name
 
-    if exists( migration_path ):
+    if not debug and exists( migration_path ):
         print 'Can\'t migrate as "%s" already exists: move it away first?' % migration_name
         exit(-1)
 
