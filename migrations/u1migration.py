@@ -6,7 +6,6 @@ from util.xml import insert_after
 
 def migrate( save, seed, new_save ):
     # 1.0 unstable already handles a bunch of things, though it'll warn like hell:
-    # Could not find class Need_Space while resolving node li. Trying to use RimWorld.Need instead.
     # Couldn't find exact match for backstory Politician92 , using closest match Politician1
     # Could not find think node with key 1694688019
     # etc.
@@ -58,6 +57,15 @@ def migrate( save, seed, new_save ):
     xs = tree.xpath('//def[text()="GreenThumb"]' )
     for x in xs:
         x.getparent().remove( x )
+
+    # Could not find class Need_Space while resolving node li.
+    xs = tree.xpath( '//li[@Class="Need_Space"]' )
+    for x in xs:
+        x.getparent().remove( x )
+
+    # Current map is null after loading but there are maps available. Setting current map to [0].
+    n = tree.xpath( '/savegame/game' )[0]
+    n.insert( 0, etree.XML( '<currentMapIndex>0</currentMapIndex>' ) )
 
     # Format it nicely; takes space but it's easier to debug.
     tree.write( new_save, pretty_print=True, xml_declaration=True, encoding='utf-8' )
