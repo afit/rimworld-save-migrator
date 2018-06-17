@@ -18,15 +18,19 @@ def migrate( save, new_save ):
     # "<maxDrawSizeInTiles>(26.4, 26.4)</maxDrawSizeInTiles>" should be
     # <maxDrawSizeInTiles>26.4</maxDrawSizeInTiles>
     xs = tree.xpath( '//maxDrawSizeInTiles' )
-
     for x in xs:
         x.text = x.text.split( ',' )[0].strip( '(' )
 
     # Goodwill is now an int: 10.00471
     xs = tree.xpath( '//goodwill' )
-
     for x in xs:
         x.text = str( int( float( x.text ) ) )
+
+    # jobgivers can't be looked up. Who knows why? Not me.
+    # "Could not find think node with keyX"
+    xs = tree.xpath( '//lastJobGiverKey' )
+    for x in xs:
+        x.getparent().remove( x )
 
     # On one hand, relying on the order of the XML is horrible. On the other...
     # No, it's always grim. We do it in reverse order, otherwise we'd change the
@@ -227,6 +231,8 @@ def migrate( save, new_save ):
 
                         parts[0].text = new_part_index
 
+    # Let's update the version string
+    tree.xpath('/savegame/meta/gameVersion')[0].text = '1.0.1936 rev835'
 
     # Format it nicely; takes space but it's easier to debug.
     tree.write( new_save, pretty_print=True, xml_declaration=True, encoding='utf-8' )
