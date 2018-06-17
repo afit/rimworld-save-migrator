@@ -8,6 +8,7 @@ class Save(object):
 
     def __init__( self, path ):
         self.name = splitext( basename( path ) )[0]
+        self.path = path
         try:
             self.tree = etree.parse( path )
         except etree.XMLSyntaxError, e:
@@ -16,6 +17,10 @@ class Save(object):
     @property
     def version(self):
         return self.tree.xpath('/savegame/meta/gameVersion' )[0].text
+
+    @property
+    def versions(self):
+        return [int(i) for i in self.version.split( ' ' )[0].split( '.' )]
 
     @property
     def seed(self):
