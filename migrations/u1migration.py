@@ -3,12 +3,17 @@ from os.path import join, dirname, normpath, exists, split
 
 from util.xml import insert_after
 
+import b18tables, u1tables
+
 
 def migrate( save, seed, new_save ):
     # 1.0 unstable already handles a bunch of things, though it'll warn like hell:
     # Couldn't find exact match for backstory Politician92 , using closest match Politician1
     # Could not find think node with key 1694688019
     # etc.
+
+    # This seems fair enough; nothing to do here?
+    # Spawned NeutroamineX with stackCount 393 but stackLimit is 150. Truncating.
 
     # Now for the smarter XML stuff
     tree = etree.parse( save )
@@ -66,6 +71,134 @@ def migrate( save, seed, new_save ):
     # Current map is null after loading but there are maps available. Setting current map to [0].
     n = tree.xpath( '/savegame/game' )[0]
     n.insert( 0, etree.XML( '<currentMapIndex>0</currentMapIndex>' ) )
+
+    # Oh my god, some animals now have underscores in their names. But not all.
+    # Let's use a map
+    kinds = {
+        # Old, new
+        'WolfTimber': 'Wolf_Timber',
+        'WolfArctic': 'Wolf_Arctic',
+        'FoxArctic': 'Fox_Arctic',
+        'FoxRed': 'Fox_Red',
+        'FoxFennec': 'Fox_Fennec',
+        'PolarBear': 'Bear_Polar',
+        'GrizzlyBear': 'Bear_Grizzly',
+        'Mechanoid_Centipede': 'Mech_Centipede',
+        'Mechanoid_Scyther': 'Mech_Scyther',
+        'Scyther': 'Mech_Scyther',
+    }
+
+    for kind in kinds.keys():
+        xs = tree.xpath( '//def[text()="%s"] | //kindDef[text()="%s"] | //kind[text()="%s"]' % ( kind, kind, kind ) )
+        for x in xs:
+            x.text = kinds[kind]
+
+    # Let's fix stuff happening with bodies.
+    for hediffset in tree.xpath('//hediffSet/hediffs'):
+        if hediffset.getparent().getparent().getparent().xpath('name')[0].xpath('nick'):
+            # Human
+            name = hediffset.getparent().getparent().getparent().xpath('name')[0].xpath('nick')[0].text
+            kind = hediffset.getparent().getparent().getparent().xpath('def')[0].text
+        elif len( hediffset.getparent().getparent().getparent().xpath('name')[0].getchildren() ) == 0:
+            # No name yet
+            name = hediffset.getparent().getparent().getparent().xpath('id')[0].text
+            kind = hediffset.getparent().getparent().getparent().xpath('kindDef')[0].text
+        else:
+            # If it's an animal it won't have a nick
+            name = hediffset.getparent().getparent().getparent().xpath('name')[0].xpath('name')[0].text
+            kind = hediffset.getparent().getparent().getparent().xpath('kindDef')[0].text
+
+        print 'Name: %s' % name, kind
+
+        for li in hediffset.iterchildren():
+            if li.attrib.has_key('Class'): # and li.attrib['Class'] in ['Hediff_AddedPart', 'Hediff_Implant']:
+                if li.xpath('partIndex'):
+
+                    found = False
+
+                    # Let's map that new kind back to the old to look it up
+                    if kind in kinds.values():
+                        for o, n in kinds.iteritems():
+                            if n == kind:
+                                found = True
+                                old_kind = o
+                                break
+
+                    if not found:
+                        old_kind = kind
+
+                    # Look up this kind's body
+                    if not old_kind in b18tables.type_bodies.keys():
+                        raise Exception( 'Kind "%s" not found in old bodies' % old_kind )
+                    old_body = b18tables.type_bodies[old_kind]
+
+                    if not kind in u1tables.type_bodies.keys():
+                        raise Exception( 'Kind "%s" not found in new bodies' % kind )
+                    new_body = u1tables.type_bodies[kind]
+
+                    old_parts = b18tables.body_parts[old_body]
+                    new_parts = u1tables.body_parts[new_body]
+
+                    print kind, old_body, new_body
+
+                    parts = li.xpath('partIndex')
+
+                    if len(parts) == 1:
+                        old_part_index = int( parts[0].text )
+                        part = old_parts[ old_part_index ]
+
+                        try:
+                            new_part_index = str( new_parts.index( part ) )
+                        except ValueError:
+                            # It seems everything is now ambidextrous.
+                            old_part = part
+
+                            if 'Left' in part:
+                                part = part.replace( 'Left', '' )
+                            if 'Right' in part:
+                                part = part.replace( 'Right', '' )
+                            if 'Front' in part:
+                                part = part.replace( 'Front', '' )
+                            if 'Rear' in part:
+                                part = part.replace( 'Rear', '' )
+
+                            # Digit contexts
+                            if 'HandMiddle' in part:
+                                part = part.replace( 'HandMiddle', '' )
+                            if 'HandRing' in part:
+                                part = part.replace( 'HandRing', '' )
+                            if 'HandIndex' in part:
+                                part = part.replace( 'HandIndex', '' )
+                            if 'HandPinky' in part:
+                                part = part.replace( 'HandPinky', 'Finger' )
+                            if 'HandThumb' in part:
+                                part = part.replace( 'HandThumb', 'Finger' )
+                            if 'FootLittle' in part:
+                                part = part.replace( 'FootLittle', '' )
+                            if 'FootMiddle' in part:
+                                part = part.replace( 'FootMiddle', '' )
+                            if 'FootFourth' in part:
+                                part = part.replace( 'FootFourth', '' )
+                            if 'FootSecond' in part:
+                                part = part.replace( 'FootSecond', '' )
+                            if 'FootBig' in part:
+                                part = part.replace( 'FootBig', '' )
+
+                            if part == 'Rib':
+                                part = 'Ribcage' # FIXME multiple injured ribs = multiple ribcages!
+
+                            if part == old_part:
+                                raise
+
+                            try:
+                                new_part_index = str( new_parts.index( part ) )
+                            except:
+                                print old_part, part, new_parts
+
+                        #print '\t%s\'s part is: %s, changing from %s to %s' % ( name, part, old_part_index, new_part_index )
+
+                        parts[0].text = new_part_index
+
 
     # Format it nicely; takes space but it's easier to debug.
     tree.write( new_save, pretty_print=True, xml_declaration=True, encoding='utf-8' )
