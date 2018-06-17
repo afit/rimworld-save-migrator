@@ -62,9 +62,12 @@ Report issues etc. to https://github.com/afit/rimworld-save-migrator.
 * The migration is still limited; users can help by raising any issues they see other than the caveats below. This may be something of a fool's errand as Tynan continues to update the `1.0 unstable` loader.
 * Steel outcrops etc. are turned into squirrel meat.
 * Workstations and other objects may be rotated 180.
-* Windmills, component stations are destroy (as they've grown bigger).
 * Pawn limbs rearranged, crippling any with prosthetics.
-* Turrets need repair.
+
+The following seem like desired behaviour, and probably shouldn't be fixed:
+
+* Windmills, component stations are destroyed (as they've grown bigger).
+* Turrets immediately need repair.
 
 #### `A16` to `A17`
 
