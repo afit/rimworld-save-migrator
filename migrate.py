@@ -3,7 +3,7 @@ import sys, subprocess, os
 
 from os.path import join, dirname, normpath, split
 
-from utils.filesystem import get_save_path
+from util.filesystem import get_save_path
 
 save_path, exists = get_save_path()
 
