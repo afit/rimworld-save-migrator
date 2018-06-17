@@ -8,7 +8,7 @@ It won't ever alter or overwrite your pre-existing saves.
 
 | Migration   | Support          | Era |
 | ----------- | ------------------ | --- |
-| `B18` to `1.0 unstable`   | ⚠️ In progress | June 2018 |
+| `B18` to `1.0 unstable`   | ⚠️ Partial, in progress | June 2018 |
 | `A17` to `B18`  | ✅ Built-in to RimWorld `B18` | October 2017 |
 | [`A16` to `A17`](https://github.com/afit/rimworld-save-migrator/blob/master/upgrade_rws_a16_to_a17.py) | ✅ Complete | June 2017 |
 | [`A15` to `A16`](https://github.com/afit/rimworld-save-migrator/blob/master/upgrade_rws_a15_to_a16.py)  | ✅ Complete | December 2016 |
@@ -59,10 +59,12 @@ Report issues etc. to https://github.com/afit/rimworld-save-migrator.
 
 #### `B18` to `1.0 unstable`
 
-* The migration is still limited; users can help by raising any issues they see other than the caveats below. This may be something of a fool's errand as Tynan continues to update the `1.0 unstable` loader.
 * Steel outcrops etc. are turned into squirrel meat.
 * Workstations and other objects may be rotated 180.
-* Pawn limbs rearranged, crippling any with prosthetics.
+* ~~Pawn limbs rearranged, crippling any with prosthetics.~~ *Fixed*
+* ~~Various thoughts causing errors.~~ *Fixed*
+* ~~Fox, bear, mech, wolf changes.~~ *Fixed*
+
 
 The following seem like desired behaviour, and probably shouldn't be fixed:
 
