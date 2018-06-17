@@ -55,7 +55,23 @@ def migrate():
             print 'Couldn\'t find path or save called "%s".' % save_name
             exit(-1)
 
-    print save.name
+    print 'Examining save; it is version %s.' % save.version
+
+    # Lets look at the save we've been told about.
+    version = [int(i) for i in save.version.split( ' ' )[0].split( '.' )]
+
+    if version[0] == 1: # Version 1. That's the latest, for now.
+        print 'Further migrations not supported; check for an updated script.'
+        exit(-1)
+    elif version[1] < 15:
+        print 'Follow the guide at https://github.com/afit/rimworld-save-migrator to migrate saves from below A15.'
+        exit(-1)
+    elif version[1] == 17:
+        print 'This save can be migrated to B18 by loading and saving it in RimWorld B18.'
+        exit(-1)
+
+    # This leaves us with A15, A16 and B18.
+    print version
 
 if __name__ == '__main__':
     migrate()
