@@ -69,7 +69,7 @@ for save in os.listdir( save_path ):
             if name.text == modIds[i].text:
                 mods.append( name.text )
             else:
-                mods.append( '% (%s)' % ( name.text, modIds[i].text ) )
+                mods.append( u'%s (%s)' % ( name.text, modIds[i].text ) )
             i += 1
         mods = ', '.join( mods )
 
