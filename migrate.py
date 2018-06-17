@@ -57,6 +57,9 @@ def migrate():
 
     print 'Examining save; it is version %s.' % save.version
 
+    if save.mods:
+        print 'This save includes mods, which complicate migration. If migration does not complete, try re-saving your original game without mods.'
+
     # Lets look at the save we've been told about.
     if save.versions[0] == 1: # Version 1. That's the latest, for now.
         print 'Further migrations not supported; check for an updated script.'
