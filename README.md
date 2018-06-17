@@ -1,94 +1,81 @@
 # RimWorld save game migrator
 
-This repo contains a number of Python scripts to convert RimWorld
-saves between different versions.
-For more on RimWorld, see the [official site](https://rimworldgame.com) or [/r/RimWorld](https://www.reddit.com/r/RimWorld/).
+This will help you migrate your RimWorld saves so that you can continue with them as you upgrade the game. For more on RimWorld, see the [official site](https://rimworldgame.com) or [/r/RimWorld](https://www.reddit.com/r/RimWorld/).
 
-| Migration   | Supported          | Era |
+It won't ever alter or overwrite your pre-existing saves.
+
+### Supported versions
+
+| Migration   | Support          | Era |
 | ----------- | ------------------ | --- |
-| A17 to B18  | Built-in to RimWorld B18 | October 2017 |
-| [A16 to A17](https://github.com/afit/rimworld-save-migrator/blob/master/upgrade_rws_a16_to_a17.py) | ✅ Fully automated | June 2017 |
-| [A15 to A16](https://github.com/afit/rimworld-save-migrator/blob/master/upgrade_rws_a15_to_a16.py)  | ✅ Fully automated | December 2016 |
-| A14 to A15  | [Manual guide](https://www.reddit.com/r/RimWorld/comments/4zrotj/guide_how_to_update_an_a14_save_to_a15/) | August 2016 |
+| `B18` to `1.0 unstable`   | ⚠️ In progress | June 2018 |
+| `A17` to `B18`  | ✅ Built-in to RimWorld `B18` | October 2017 |
+| [`A16` to `A17`](https://github.com/afit/rimworld-save-migrator/blob/master/upgrade_rws_a16_to_a17.py) | ✅ Complete | June 2017 |
+| [`A15` to `A16`](https://github.com/afit/rimworld-save-migrator/blob/master/upgrade_rws_a15_to_a16.py)  | ✅ Complete | December 2016 |
+| `A14` to `A15`  | ⚠️ [Manual guide](https://www.reddit.com/r/RimWorld/comments/4zrotj/guide_how_to_update_an_a14_save_to_a15/) | August 2016 |
 
-In order to run these migrations, you'll first need to create a new saved game using the version you want to migrate to, with the same seed as the save you want to upgrade.
+### Requirements
+
+The `migrate.py` script works on Windows, macOS and Linux, and requires Python `2.7`.
+Python is pre-installed on macOS and Linux. On Windows, it is available as a [free download](https://www.python.org/downloads/). Make sure you get the `2.7` version, not the `3.x`.
+
+There's a single dependancy that the scripts require: `lxml`.
+To install `lxml`, you should run `pip install lxml` in your Command Prompt or Terminal.
+
+## Getting started
+
+The script can be run without any arguments, and will tell you how to proceed.
+
+As in this example output, it will show [where your saves are located](http://rimworldwiki.com/wiki/Save_file) and summarise them:
+
+```bash
+$ python migrate.py
+No argument provided; listing saves in /Users/Guest/Library/Application Support/RimWorld/Saves...
+
+ * "a14_bogdan" (version: 0.14.1249 rev944, seed: bogdan (200, 150), playtime: 0:00:24, mods: Core)
+ * "a15_bogdan" (version: 0.15.1284 rev141, seed: bogdan (200, 150), playtime: 0:00:23, mods: Core)
+ * "a16_bogdan" (version: 0.16.1393 rev538, seed: bogdan (250, 1, 250), playtime: 0:00:26, mods: Core)
+ * "a17_bogdan" (version: 0.17.1557 rev1154, seed: bodgan (250, 1, 250), playtime: 0:00:12, mods: Core)
+ * "b18_bogdan" (version: 0.18.1722 rev1206, seed: bogdan (250, 1, 250), playtime: 0:00:06, mods: Core)
+ * "u1_bogdan" (version: 1.0.1936 rev835, seed: bogdan (250, 1, 250), playtime: 0:01:26, mods: Core)
+
+Run this script again with a path or save name to migrate it.
+```
+
+If you run it with the name of a save to migrate, or a path to a save, it will try to migrate it:
+
+```bash
+$ python migrate.py a16_bogdan
+Examining save; it is version 0.16.1393 rev538.
+Mods are installed on this save, which may break the process. If migration does not complete, try re-saving your original game without mods.
+In order to migrate this save, data is needed from a new A17 save; I'll use your most recently modified save of this version.
+Using "a17_bogdan" as seed...
+Migrating to new save "a16_bogdan.A17migration.rws"...
+Migrated successfully to "a16_bogdan.A17migration.rws", you should load and save this before migrating further. Good luck!
+Report issues etc. to https://github.com/afit/rimworld-save-migrator.
+```
 
 ### Caveats
 
-If you are upgrading multiple versions, load and save the migrated game at each stage.
+#### `B18` to `1.0 unstable`
 
-* A16 to A17:
-  * Some character backstories have been removed; they will be assigned random ones.
-  * Some material stacks will be trimmed to 75.
-* A15 to A16:
-  * Body types will all be set to male: [more details](http://pastebin.com/HNFFsMBC).
-  * You will be asked to name your settlement again.
-  * Legacy mood notices referencing characters will refer to them as "{0}".
+* The migration is still a placeholder.
+* Steel outcrops etc. are turned into squirrel meat.
+* Workstations and other objects may be rotated 180.
+* Windmills, component stations are destroy (as they've grown bigger).
+* Pawn limbs rearranged, crippling any with prosthetics.
+* Turrets need repair.
 
-## Requirements
+#### `A16` to `A17`
 
-The scripts work on Windows, macOS and Linux, and require Python 2.7.
-Python is pre-installed on macOS and Linux. On Windows, it is available as a [free download](https://www.python.org/downloads/).
-Make sure you get the 2.7 version, not the 3.x.
+* Some character backstories have been removed; they will be assigned random ones.
+* Some material stacks will be trimmed to 75.
 
-There's a single dependancy that the scripts require: `lxml`.
-To install `lxml`, you'll want to run  `pip install lxml` in your Command Prompt or Terminal.
-If you already know Python, you'll probably use `virtualenv` for this.
+#### `A15` to `A16`
 
-If you have mods installed, you'll want to remove them first, and remove the
-references to them from your save.
-
-## Analysing saves
-
-These scripts include `analyse_saves.py`, a handy utility for extracting seeds and playtime from maps.
-It will also report on the installed mods, and [where your saves are located](http://rimworldwiki.com/wiki/Save_file).
-If you run it, it looks like this:
-
-```bash
-$ python analyse_saves.py
-Your saves should be at /Users/Guest/Library/Application Support/RimWorld/Saves...
-a14_bogdan
- Version:       0.14.1249 rev944
- Seed:          bogdan (200, 150)
- Real playtime: 0:00:24
- Mods:          Core
-a15_bogdan
- Version:       0.15.1284 rev141
- Seed:          bogdan (200, 150)
- Real playtime: 0:00:23
- Mods:          Core
-a16_bogdan
- Version:       0.16.1393 rev538
- Seed:          bogdan (250, 1, 250)
- Real playtime: 0:00:26
- Mods:          Core
-a17_bogdan
- Version:       0.17.1557 rev1154
- Seed:          bodgan (250, 1, 250)
- Real playtime: 0:00:12
- Mods:          Core
-```
-
-## Migrating saves
-
-The scripts are simple to run. If you run it without any arguments, it'll tell you how:
-
-```bash
-$ python upgrade_rws_a16_to_a17.py
-This script will patch your save to A17, saving it as a new file and adding "a17-" to the name. It won't modify your old saves. It requires two arguments:
-
-    python upgrade_rws_a16_to_a17.py [a16-save-to-upgrade] [a17-save-with-same-seed]
-
-- [a16-save-to-upgrade] should be the full path to your saved game.
-- [a17-save-with-same-seed] second should be the full path to a fresh A17 saved game,
-  generated with the same seed as your A16 game.
-
-Like this:
-
-    python upgrade_rws_a16_to_a17.py /path/to/my-save.rws /path/to/a17-same-seed.rws
-
-Good luck! Fixes, etc. to https://github.com/afit/rimworld-save-migrator.
-```
+* Body types will all be set to male: [more details](http://pastebin.com/HNFFsMBC).
+* You will be asked to name your settlement again.
+* Legacy mood notices referencing characters will refer to them as "{0}", over time these will decay.
 
 ## Contributing improvements and reporting problems
 
