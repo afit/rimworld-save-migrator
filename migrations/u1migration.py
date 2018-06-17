@@ -50,7 +50,6 @@ def migrate( save, seed, new_save ):
     <li Class="Verb_MeleeAttack"><loadID>Bow_Great450__Poke</loadID></li>'''
 
     xs = tree.xpath( '//li[@Class="Verb_MeleeAttack"]' )
-
     for x in xs:
         x.attrib['Class'] = 'Verb_MeleeAttackDamage'
         x.insert( 1, etree.XML( '<li>0</li>' ) )
@@ -59,6 +58,11 @@ def migrate( save, seed, new_save ):
     xs = tree.xpath('//def[text()="GreenThumb"]' )
     for x in xs:
         x.getparent().remove( x )
+
+    # GreenThumbHappy issues
+    xs = tree.xpath('//def[text()="GreenThumbHappy"]' )
+    for x in xs:
+        x.getparent().getparent().remove( x.getparent() )
 
     # Could not find class Need_Space while resolving node li.
     xs = tree.xpath( '//li[@Class="Need_Space"]' )
@@ -90,6 +94,10 @@ def migrate( save, seed, new_save ):
         'GrizzlyBear': 'Bear_Grizzly',
         'Mechanoid_Centipede': 'Mech_Centipede',
         'Mechanoid_Scyther': 'Mech_Scyther',
+    }
+
+    extra_kinds = {
+        'Centipede': 'Mech_Centipede',
         'Scyther': 'Mech_Scyther',
     }
 
@@ -98,8 +106,14 @@ def migrate( save, seed, new_save ):
         for x in xs:
             x.text = kinds[kind]
 
+    for kind in extra_kinds.keys():
+        xs = tree.xpath( '//def[text()="%s"] | //kindDef[text()="%s"] | //kind[text()="%s"]' % ( kind, kind, kind ) )
+        for x in xs:
+            x.text = extra_kinds[kind]
+
     # Let's fix stuff happening with bodies.
     for hediffset in tree.xpath('//hediffSet/hediffs'):
+        # We need the kind to map it, and the name really helps with debugging this.
         if hediffset.getparent().getparent().getparent().xpath('name')[0].xpath('nick'):
             # Human
             name = hediffset.getparent().getparent().getparent().xpath('name')[0].xpath('nick')[0].text
