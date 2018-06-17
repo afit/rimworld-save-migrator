@@ -58,7 +58,7 @@ def copy_element_to_section( xpath_results_list, section ):
     section.insert( -1, xpath_results_list[0] )
 
 # It's just a list of valid occupations in RimWorld A16
-f = open( 'occupations_a15_to_a16.txt' )
+f = open( join( 'resources', 'occupations_a15_to_a16.txt' ) )
 
 # Read in the occupations, build a dict and strip the number off. We use the original as a key in the replacement.
 occs = {}
