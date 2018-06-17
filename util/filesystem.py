@@ -1,9 +1,10 @@
 from sys import platform as _platform
-from os.path import exists, expanduser
+from os.path import exists, expanduser, join
+from os import listdir
 
 
-def get_save_path():
-    ''' Return the default save path and whether it exists. '''
+def get_saves():
+    ''' Return available saves and the default save location. '''
 
     if _platform == "darwin": # macOS
         save_path = expanduser(
@@ -23,4 +24,11 @@ def get_save_path():
             '~/.config/unity3d/Ludeon Studios/RimWorld by Ludeon Studios/Saves'
         )
 
-    return save_path, exists( save_path )
+    saves = []
+    if exists( save_path ):
+        for path in listdir( save_path ):
+            # Let's find all .rws files
+            if path.endswith('.rws'):
+                saves.append( join( save_path, path ) )
+
+    return saves, save_path

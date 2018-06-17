@@ -1,3 +1,4 @@
+from os.path import splitext, basename
 from lxml import etree
 
 from util.exceptions import MisformedSaveError
@@ -6,6 +7,7 @@ from util.exceptions import MisformedSaveError
 class Save(object):
 
     def __init__( self, path ):
+        self.name = splitext( basename( path ) )[0]
         try:
             self.tree = etree.parse( path )
         except etree.XMLSyntaxError, e:
