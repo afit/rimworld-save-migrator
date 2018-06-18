@@ -81,6 +81,8 @@ The following seem like desired behaviour, and probably shouldn't be fixed:
 
 ## Contributing improvements and reporting problems
 
+Build and test status is currently:  [![CircleCI](https://circleci.com/gh/afit/rimworld-save-migrator.svg?style=svg)](https://circleci.com/gh/afit/rimworld-save-migrator)
+
 Please use the [issues tracker](https://github.com/afit/rimworld-save-migrator/issues)
 to report any bugs. Pull requests are gratefully received.
 
