@@ -239,7 +239,7 @@ def migrate( save, new_save ):
             x.text = u1stories.mappings[ x.text ]
 
     # Let's update the version string
-    tree.xpath('/savegame/meta/gameVersion')[0].text = '1.0.1936 rev835'
+    tree.xpath('/savegame/meta/gameVersion')[0].text = '1.0.1938 rev905'
 
     # Format it nicely; takes space but it's easier to debug.
     tree.write( new_save, pretty_print=True, xml_declaration=True, encoding='utf-8' )
