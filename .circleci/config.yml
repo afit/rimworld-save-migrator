@@ -5,7 +5,7 @@ defaults: &defaults
 
 version: 2
 jobs:
-  build:
+  quicktest:
     <<: *defaults
     steps:
       - checkout
@@ -41,7 +41,7 @@ jobs:
       - store_artifacts:
           path: test-reports
 
-  test:
+  deeptest:
     <<: *defaults
     steps:
       # Yes, we check out again rather than using a workspace,
@@ -82,11 +82,11 @@ jobs:
 workflows:
   version: 2
 
-  build-test:
+  test:
     jobs:
       # If the quick tests pass, let's run them all
       # We do this to get failures fast.
-      - build
-      - test:
+      - quicktest
+      - deeptest:
           requires:
-            - build
+            - quicktest
