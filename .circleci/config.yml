@@ -32,7 +32,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            py.test -vv
+            py.test --junitxml=test-reports/junit.xml
 
       - store_artifacts:
           path: test-reports
