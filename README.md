@@ -33,7 +33,7 @@ No argument provided; listing saves in /Users/Guest/Library/Application Support/
  * "a14_bogdan" (version: 0.14.1249 rev944, seed: bogdan (200, 150), playtime: 0:00:24, mods: Core)
  * "a15_bogdan" (version: 0.15.1284 rev141, seed: bogdan (200, 150), playtime: 0:00:23, mods: Core)
  * "a16_bogdan" (version: 0.16.1393 rev538, seed: bogdan (250, 1, 250), playtime: 0:00:26, mods: Core)
- * "a17_bogdan" (version: 0.17.1557 rev1154, seed: bodgan (250, 1, 250), playtime: 0:00:12, mods: Core)
+ * "a17_bogdan" (version: 0.17.1557 rev1154, seed: bogdan (250, 1, 250), playtime: 0:00:12, mods: Core)
  * "b18_bogdan" (version: 0.18.1722 rev1206, seed: bogdan (250, 1, 250), playtime: 0:00:06, mods: Core)
  * "u1_bogdan" (version: 1.0.1936 rev835, seed: bogdan (250, 1, 250), playtime: 0:01:26, mods: Core)
 
