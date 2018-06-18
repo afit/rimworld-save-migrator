@@ -14,7 +14,7 @@ for l in f.readlines():
     if 'Giving random' in l:
         continue
     elif 'or any close match' in l:
-        print '\t\'%s\': \'VideoGamer91\',' % ( x[6] )
+        print '\t\'%s\': \'VideoGamer91\',' % ( x[6].replace( ',', '' ) )
     else:
         print '\t\'%s\': \'%s\',' % ( x[6], x[11], )
 
