@@ -51,7 +51,9 @@ class Save(object):
         i, mods = 0, {}
 
         for name in modNames:
-            mods[ name.text ] = modIds[i].text
+            id = modIds[i].text
+            if id == name.text: id = None
+            mods[ name.text ] = id
             i += 1
 
         return mods
