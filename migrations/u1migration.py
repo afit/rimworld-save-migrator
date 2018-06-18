@@ -100,6 +100,17 @@ def migrate( save, new_save ):
         'Mechanoid_Scyther': 'Mech_Scyther',
     }
 
+    # This is crushing: the loadID of objects matters. We can't leave something called
+    # Thing_Mechanoid_Scyther10934 behind, because it should now be called Mech_Scyther10934.
+    # Let's deal with it. This'll be slow.
+    for old, new in kinds.iteritems():
+        xs = tree.xpath( '//li[starts-with(text(), "Thing_%s")] | //id[starts-with(text(), "%s")] | //loadID[starts-with(text(), "%s")]' % ( old, old, old, ) )
+        for x in xs:
+            if x.text.startswith( 'Thing_' ):
+                x.text = 'Thing_%s%s' % ( new, x.text[ len( 'Thing_' ) + len( old ) :] )
+            else:
+                x.text = '%s%s' % ( new, x.text[ len( old ) :] )
+
     extra_kinds = {
         'Centipede': 'Mech_Centipede',
         'Scyther': 'Mech_Scyther',
