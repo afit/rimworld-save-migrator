@@ -9,10 +9,24 @@ jobs:
     steps:
       - checkout
 
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "resources/requirements.txt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
       - run:
           name: install dependencies
           command: |
-            pip install lxml pytest
+            python -m virtualenv venv
+            . venv/bin/activate
+            pip install -r resources/requirements.txt
+
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "resources/requirements.txt" }}
 
       - run:
           name: run tests
@@ -22,4 +36,3 @@ jobs:
       - store_artifacts:
           path: test-reports
           destination: test-reports
-          
