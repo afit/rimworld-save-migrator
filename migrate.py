@@ -22,7 +22,7 @@ def migrate():
 
         if not saves:
             print 'However, there aren\'t any saves there.'
-            exit(-1)
+            exit(0)
 
         try:
             from lxml import etree
