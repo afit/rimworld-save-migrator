@@ -10,8 +10,8 @@ It won't ever alter or overwrite your pre-existing saves.
 | ----------- | ------------------ | --- |
 | `B18` to `1.0 unstable`   | ⚠️ Partial, in progress | June 2018 |
 | `A17` to `B18`  | ✅ Built-in to RimWorld `B18` | October 2017 |
-| [`A16` to `A17`](https://github.com/afit/rimworld-save-migrator/blob/master/upgrade_rws_a16_to_a17.py) | ✅ Complete | June 2017 |
-| [`A15` to `A16`](https://github.com/afit/rimworld-save-migrator/blob/master/upgrade_rws_a15_to_a16.py)  | ✅ Complete | December 2016 |
+| `A16` to `A17` | ✅ Complete | June 2017 |
+| `A15` to `A16`  | ✅ Complete | December 2016 |
 | `A14` to `A15`  | ⚠️ [Manual guide](https://www.reddit.com/r/RimWorld/comments/4zrotj/guide_how_to_update_an_a14_save_to_a15/) | August 2016 |
 
 ### Requirements
