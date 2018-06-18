@@ -1,12 +1,51 @@
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: circleci/python:2.7.15-jessie
+
 version: 2
 jobs:
   build:
-    docker:
-      - image: circleci/python:2.7.15-jessie
-
-    working_directory: ~/repo
-
+    <<: *defaults
     steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "resources/requirements.txt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: install dependencies
+          command: |
+            python -m virtualenv venv
+            . venv/bin/activate
+            pip install -r resources/requirements.txt
+
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "resources/requirements.txt" }}
+
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            py.test -m "not slow" --junitxml=test-reports/junit.xml
+
+      - store_test_results:
+          path: test-reports
+
+      - store_artifacts:
+          path: test-reports
+
+  test:
+    <<: *defaults
+    steps:
+      # Yes, we check out again rather than using a workspace,
+      # as per https://circleci.com/blog/deep-diving-into-circleci-workspaces/
       - checkout
 
       # Download and cache dependencies
@@ -38,4 +77,16 @@ jobs:
           path: test-reports
 
       - store_artifacts:
-          path: test-reports   
+          path: test-reports
+
+workflows:
+  version: 2
+
+  build-test:
+    jobs:
+      # If the quick tests pass, let's run them all
+      # We do this to get failures fast.
+      - test
+      - build:
+          requires:
+            - test
