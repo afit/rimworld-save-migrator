@@ -86,7 +86,7 @@ workflows:
     jobs:
       # If the quick tests pass, let's run them all
       # We do this to get failures fast.
-      - test
       - build:
+      - test
           requires:
-            - test
+            - build
