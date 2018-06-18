@@ -3,7 +3,7 @@ from os.path import join, dirname, normpath, exists, split
 
 from util.xml import insert_after
 
-import b18tables, u1tables
+import b18tables, u1tables, u1stories
 
 
 def migrate( save, new_save ):
@@ -230,6 +230,13 @@ def migrate( save, new_save ):
                         #print '\t%s\'s part is: %s, changing from %s to %s' % ( name, part, old_part_index, new_part_index )
 
                         parts[0].text = new_part_index
+
+    # Let's map the backgrounds to avoid the cruft in the logs
+    xs = tree.xpath( '//story/childhood | //story/adulthood' )
+    for x in xs:
+        # We only need to map some
+        if x.text in u1stories.mappings.keys():
+            x.text = u1stories.mappings[ x.text ]
 
     # Let's update the version string
     tree.xpath('/savegame/meta/gameVersion')[0].text = '1.0.1936 rev835'
