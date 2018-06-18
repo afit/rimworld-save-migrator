@@ -1,8 +1,6 @@
 # RimWorld save game migrator
 
-This script will migrate your RimWorld saves so that you can continue with them as you upgrade the game. For more on RimWorld, see the [official site](https://rimworldgame.com) or [/r/RimWorld](https://www.reddit.com/r/RimWorld/).
-
-It won't ever alter or overwrite your pre-existing saves.
+This script will migrate your RimWorld saves so that you can continue with them as you upgrade the game. For more on RimWorld, see the [official site](https://rimworldgame.com) or [/r/RimWorld](https://www.reddit.com/r/RimWorld/). It won't ever alter or overwrite your pre-existing saves.
 
 ### Supported versions
 
