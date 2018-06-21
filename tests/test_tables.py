@@ -6,7 +6,7 @@ class TestTables(object):
 
     def test_imports(self):
         # Have they been generated correctly?
-        from migrations import a16tables
-        from migrations import a17tables
-        from migrations import b18tables
-        from migrations import u1tables
+        from versions import a16tables
+        from versions import a17tables
+        from versions import b18tables
+        from versions import u1tables

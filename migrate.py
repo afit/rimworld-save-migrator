@@ -80,17 +80,17 @@ def migrate():
         '0.18': {
             'seed_needed': None,
             'seed_readable': '1.0',
-            'migration': 'migrations.u1migration',
+            'migration': 'versions.u1migration',
         },
         '0.16': {
             'seed_needed': [0, 17],
             'seed_readable': 'A17',
-            'migration': 'migrations.a17migration',
+            'migration': 'versions.a17migration',
         },
         '0.15': {
             'seed_needed': [0, 16],
             'seed_readable': 'A16',
-            'migration': 'migrations.a16migration',
+            'migration': 'versions.a16migration',
         },
     }
 
