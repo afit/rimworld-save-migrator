@@ -6,7 +6,8 @@ This script will migrate your RimWorld saves so that you can continue with them 
 
 | Migration   | Support          | Era |
 | ----------- | ------------------ | --- |
-| `B18` to `1.0 unstable`   | ⚠️ Partial, in progress | June 2018 |
+| `B18` to `B19`  | ✅ Built-in to RimWorld `B19` | August 2018 |
+| `B18` to `U1`   | ⚠️ Partial, deprecated | June 2018 |
 | `A17` to `B18`  | ✅ Built-in to RimWorld `B18` | October 2017 |
 | `A16` to `A17` | ✅ Complete | June 2017 |
 | `A15` to `A16`  | ✅ Complete | December 2016 |
@@ -54,6 +55,8 @@ Report issues etc. to https://github.com/afit/rimworld-save-migrator.
 ### Caveats
 
 #### `B18` to `1.0 unstable`
+
+This migration path is deprecated as of August 2018, as Tynan shipped `B19` instead of `U1`.
 
 * Steel outcrops etc. are turned into squirrel meat.
 * Workstations and other objects may be rotated 180.
