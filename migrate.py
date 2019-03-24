@@ -60,7 +60,7 @@ def migrate():
 
     print 'Examining save; it is version %s.' % save.version
 
-    if save.mods:
+    if save.mods and save.mods.keys() != ['Core']:
         print 'This save includes mods, which complicate migration. If migration does not complete, try re-saving your original game without mods.'
 
     # Lets look at the save we've been told about.
