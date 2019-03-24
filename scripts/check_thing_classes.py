@@ -28,6 +28,27 @@ except etree.XMLSyntaxError, e:
     print '\tThis save is misformed; skipping it...'
     print '\tError:         %s' % e.message
 
+xs = tree.xpath( '//thing[@Class="Building"]/stuff[text()="Steel"]' )
+
+for x in xs:
+    #try:
+    #    print x.xpath('def')[0].text, x.xpath('stuff')[0].text
+    #except:
+    print etree.tostring( x )
+
+exit(0)
+
+xs = tree.xpath( '//thing[@Class="Building"]/stuff[text()="Steel"]' )
+
+for x in xs:
+    x = x.getparent()
+    #try:
+    #    print x.xpath('def')[0].text, x.xpath('stuff')[0].text
+    #except:
+    print etree.tostring( x )
+
+exit(0)
+
 # Find ALL THE THINGS...
 things = tree.xpath( '//li[@Class]/innerContainer | //thing[@Class]/innerContainer | //thing[@Class]/contents/innerContainer')
 
