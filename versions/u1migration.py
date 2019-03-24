@@ -98,16 +98,21 @@ def migrate( save, new_save ):
         'GrizzlyBear': 'Bear_Grizzly',
         'Mechanoid_Centipede': 'Mech_Centipede',
         'Mechanoid_Scyther': 'Mech_Scyther',
+        'TurretGun': 'Turret_MiniTurret',
+        'ComponentAssemblyBench': 'FabricationBench',
+        #'ComponentAssemblyBench': 'AdvancedFabrication',
     }
 
     # This is crushing: the loadID of objects matters. We can't leave something called
     # Thing_Mechanoid_Scyther10934 behind, because it should now be called Mech_Scyther10934.
     # Let's deal with it. This'll be slow.
     for old, new in kinds.iteritems():
-        xs = tree.xpath( '//li[starts-with(text(), "Thing_%s")] | //id[starts-with(text(), "%s")] | //loadID[starts-with(text(), "%s")]' % ( old, old, old, ) )
+        xs = tree.xpath( '//pawn[starts-with(text(), "Thing_%s")] | //li[starts-with(text(), "Thing_%s")] | //li[text()="%s_Corpse"] | //id[starts-with(text(), "%s")] | //loadID[starts-with(text(), "%s")]' % ( old, old, old, old, old, ) )
         for x in xs:
             if x.text.startswith( 'Thing_' ):
                 x.text = 'Thing_%s%s' % ( new, x.text[ len( 'Thing_' ) + len( old ) :] )
+            elif x.text.endswith( '_Corpse' ):
+                x.text = 'Corpse_%s' % new
             else:
                 x.text = '%s%s' % ( new, x.text[ len( old ) :] )
 
@@ -248,6 +253,41 @@ def migrate( save, new_save ):
         # We only need to map some
         if x.text in u1stories.mappings.keys():
             x.text = u1stories.mappings[ x.text ]
+
+    # Skip this next part, it's not valuable enough. We can rebuild.
+    '''
+    # Some objects have been rotated. Let's have a go at that.
+    # Valid rotations are: not specified, 1, 2, and 3.
+    # Thus to flip, we make a cycle of this and add 2.
+    types_to_rotate = ['Dresser', 'CommsConsole',]
+    # Annoyingly, the CommsConsole has its own class
+    # rots: 1 = left
+    xs = tree.xpath( '//thing[@Class="Building"] | //thing[@Class="Building_CommsConsole"]' )
+    for x in xs: # Need we rotate this thing?
+        if x.xpath('def')[0].text in types_to_rotate:
+            # The CommsConsole is also offset by 1 if you rotate it, because
+            # its chair padding is counted.
+            # Thus <pos>(130, 0, 129)</pos> should become <pos>(131...
+
+            rot = x.xpath('rot')
+
+            # Possibly the worst code I've ever written
+            if not rot:
+                rotval = 0
+            else:
+                rotval = int( rot[0].text )
+                x.remove( rot[0] ) # We're going to add it back
+
+            rotval += 2
+
+            if rotval > 3:
+                rotval -= 4
+
+            if rotval > 0:
+                x.insert( 1, etree.XML( '<rot>%s</rot>' % rotval ) )
+    '''
+
+    # Trading is also messed up: I can't right-click on a trader
 
     # Let's update the version string
     tree.xpath('/savegame/meta/gameVersion')[0].text = '1.0.1938 rev905'
