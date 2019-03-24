@@ -12,7 +12,7 @@ class Save(object):
         try:
             self.tree = etree.parse( path )
         except etree.XMLSyntaxError, e:
-            raise MisformedSaveError( e.message )
+            raise MisformedSaveError( '%s is misformed: %s' % (path, e.message) )
 
     @property
     def version(self):
