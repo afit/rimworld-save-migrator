@@ -218,7 +218,20 @@ def migrate( save, a17, new_save ):
 
                     if len(parts) == 1:
                         old_part_index = int( parts[0].text )
-                        part = a16_parts[ old_part_index ]
+
+                        try:
+                            part = a16_parts[ old_part_index ]
+                        except IndexError, e:
+                            print 'Missing entry in body parts table for "%s": %s, fudging it...' % ( a16_body, old_part_index )
+
+                            # I'm seeing parts value of 27 for QuadrupedAnimalWithHooves. Why?
+                            #print 'parts[0]', parts[0], parts[0].text
+                            #print 'a16parts', a16_parts, a16_body
+                            #print etree.tostring(li, pretty_print=True)
+                            #raise e
+
+                            # Let's just use the last value.
+                            part = a16_parts[ len(a16_parts)-1 ]
 
                         try:
                             new_part_index = str( a17_parts.index( part ) )
