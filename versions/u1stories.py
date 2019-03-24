@@ -173,7 +173,7 @@ mappings = {
 	'TraineeAlchemist98': 'TraineeAlchemist86',
 	'TransferStudent80': 'TransferStudent51',
 	'TribeChild78': 'TribeChild68',
-	'TunnelworldIlluminator50,': 'VideoGamer91',
+	'TunnelworldIlluminator50': 'VideoGamer91',
 	'UrbworldEntrepreneur55': 'UrbworldEntrepreneur14',
 	'UrbworldUrchin13': 'UrbworldUrchin61',
 	'UrbworldUrchin46': 'UrbworldUrchin61',
